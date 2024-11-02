@@ -1,0 +1,18 @@
+# Ignore build directory and output files
+/build/
+/bin/
+
+# Gradle files
+/.gradle/
+/gradle/
+/gradlew.bat
+gradlew
+
+# IDE configuration files (if applicable)
+.factorypath
+.project
+.classpath
+/.settings/
+
+# Ignore run configurations
+/run/
