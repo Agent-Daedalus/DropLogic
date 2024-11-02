@@ -10,7 +10,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 
 public class DropVelocityMap {
-  private static final Map<BlockPos, Map<Item, DropMotion>> dropChangedMotions = new HashMap<>();
+  public static Map<BlockPos, Map<Item, DropMotion>> dropChangedMotions = new HashMap<>();
 
   public static DropMotion getDropMotion(World world, BlockPos pos, ItemStack stack) {
     Map<Item, DropMotion> motionsAtPos = dropChangedMotions.get(pos);
