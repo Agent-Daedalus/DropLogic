@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Mixin; // Importing the Mixin annotation
 import org.spongepowered.asm.mixin.Overwrite; // Importing the Overwrite annotation
 
 import me.daedalus.droplogic.DropLogicMod;
+import me.daedalus.droplogic.DropVelocityMap;
 import net.minecraft.block.Block; // Importing the Block class
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack; // Importing the ItemStack class
@@ -37,19 +38,11 @@ public class DropLogicMixin {
   public static void dropStack(World world, BlockPos pos, ItemStack stack) {
     LOGGER.info("dropStack called with pos: " + pos + " and stack: " + stack);
 
-    double d = (double) 0.25 / 2.0;
     if (world.getGameRules().getBoolean(DropLogicMod.CUSTOM_DROP_RULE)) {
-      double[] randomValues = DropLogicMod.getRandomValues(world, pos, stack);
-      double e = (double) pos.getX() + 0.5 + (randomValues[0] / 2 - .25);
-      double f = (double) pos.getY() + 0.5 + (randomValues[1] / 2 - .25) - d;
-      double g = (double) pos.getZ() + 0.5 + (randomValues[2] / 2 - .25);
-
-      double l = randomValues[3] * 0.2 - 0.1;
-      double m = 0.2;
-      double n = randomValues[4] * 0.2 - 0.1; 
-      dropStack(world, () -> new ItemEntity(world, e, f, g, stack, l, m, n), stack);
+      dropStack(world, DropVelocityMap.getDropMotion(world, pos, stack).asSupplier(world, pos, stack), stack);
     }
     else {
+      double d = (double) 0.25 / 2.0;
       double e = (double)pos.getX() + 0.5 + MathHelper.nextDouble(world.random, -0.25, 0.25);
       double f = (double)pos.getY() + 0.5 + MathHelper.nextDouble(world.random, -0.25, 0.25) - d;
       double g = (double)pos.getZ() + 0.5 + MathHelper.nextDouble(world.random, -0.25, 0.25);
