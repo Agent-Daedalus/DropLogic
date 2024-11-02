@@ -1,0 +1,30 @@
+package me.daedalus.droplogic;
+
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.minecraft.command.CommandSource;
+
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.command.argument.BlockPosArgumentType;
+import net.minecraft.command.argument.PosArgument;
+
+public class DropMotionCommandHandler {
+  
+  public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+    dispatcher.register(literal("addDropMotion")
+      .then(Commands.argument("location", BlockPosArgument.blockPos())
+        .then(Commands.argument("item", StringArgumentType.string())
+          .then(Commands.argument("motionX", StringArgumentType.string())
+            .then(Commands.argument("motionY", StringArgumentType.string())
+              .executes(ctx -> addDropMotionCommand(
+                ctx.getSource(),
+                BlockPosArgument.getLoadedBlockPos(ctx, "location"),
+                StringArgumentType.getString(ctx, "item"),
+                Float.parseFloat(StringArgumentType.getString(ctx, "motionX")),
+                Float.parseFloat(StringArgumentType.getString(ctx, "motionY")))))))));
+  }
+
+}

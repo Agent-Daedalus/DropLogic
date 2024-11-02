@@ -1,6 +1,7 @@
 package me.daedalus.droplogic;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
@@ -19,6 +20,8 @@ public class DropLogicMod implements ModInitializer {
   @Override
   public void onInitialize() {
     System.out.println("Initializing DropLogic mod...");
+
+    CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> DropMotionCommandHandler.register(dispatcher, registryAccess));
 
     // Register events for server start and end
     ServerLifecycleEvents.SERVER_STARTED.register(this::onServerStarted);
