@@ -34,6 +34,19 @@ public class DropLogicMixin {
     world.spawnEntity(itemEntity);  // Spawn the item entity in the world
   }
 
+  /**
+   * Overrides the dropStack method from Block to implement custom drop logic.
+   *
+   * <p>This method is called when an item needs to be dropped in the world. If the custom drop rule
+   * is enabled, it uses the custom drop motion defined in the DropVelocityMap. If not, it calculates a
+   * default position for dropping the item within the specified block position.</p>
+   *
+   * @param world the world in which the item is being dropped
+   * @param pos the position of the block from which the item is dropped
+   * @param stack the item stack to be dropped
+   * @reason kinda the whole point of the mod
+   * @author me (daedalus)
+   */
   @Overwrite
   public static void dropStack(World world, BlockPos pos, ItemStack stack) {
     LOGGER.info("dropStack called with pos: " + pos + " and stack: " + stack);
@@ -48,17 +61,5 @@ public class DropLogicMixin {
       double g = (double)pos.getZ() + 0.5 + MathHelper.nextDouble(world.random, -0.25, 0.25);
       dropStack(world, () -> new ItemEntity(world, e, f, g, stack), stack);
     }
-  }
-
-  @Overwrite
-  public static void dropStack(World world, BlockPos pos, Direction direction, ItemStack stack) {
-    LOGGER.info("dropStack2 called with pos: " + pos + " and stack: " + stack);
-    double e = (double) pos.getX() + 0.5;
-    double f = (double) pos.getY() + 0.5 - (0.25 / 2.0); // Drop straight up
-    double g = (double) pos.getZ() + 0.5;
-    double l = 0.0; // Zero horizontal velocity
-    double m = 0.1; // Vertical velocity; adjust as needed
-    double n = 0.0; // Zero horizontal velocity
-    dropStack(world, () -> new ItemEntity(world, e, f, g, stack, l, m, n), stack);
   }
 }

@@ -15,6 +15,7 @@ import net.minecraft.util.WorldSavePath;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.Registries;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.nio.file.Path;
@@ -27,11 +28,20 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+
 public class DropMotionStorage {
   private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
   private static final String FILENAME = "drop_motions.json";
+  private static final Logger LOGGER = LoggerFactory.getLogger("droplogic");
+  private static boolean shouldSave = true;
 
   public static void saveDropMotions(MinecraftServer server, Map<BlockPos, Map<Item, DropMotion>> dropChangedMotions) {
+    if (!shouldSave) return;
+
     Path worldFolder = server.getSavePath(WorldSavePath.ROOT);
     File file = worldFolder.resolve(FILENAME).toFile();
 
@@ -86,8 +96,12 @@ public class DropMotionStorage {
       }
 
       return dropChangedMotions;
-    } catch (IOException e) {
+    } catch (Exception e) {
+      LOGGER.error("Failed to load drop motions from file, disabling saving drop_motions.json: ", e);
+      server.getPlayerManager().broadcast(Text.literal("Failed to load drop motions. Check logs for details.").formatted(Formatting.YELLOW), false);
+
       e.printStackTrace();
+      shouldSave = false;
       return new HashMap<>(); // Return an empty map on error
     }
   }
