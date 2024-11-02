@@ -10,7 +10,9 @@ Enable the customDropLogic gamerule, now all block drops (and only block drops) 
 
 ## Commands
 /setDropMotion <blockPos> <dropped-item|all> <offset> <velocity>
+
 /rerollDropMotion <blockPos> <dropped-item|all> <offset> <velocity>
+
 example: /setDropMotion 0 100 0 minecraft:cobblestone 0.0 0.1 0.0 0.0 0.2 0.0, has all blocks that drop cobblestone at (0, 100, 0) drop with an offset of (0.0, 0.1 0.0) and a velocity straight up (0.0, 0.2, 0.0).
 
 ## License
